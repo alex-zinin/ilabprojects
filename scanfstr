@@ -1,0 +1,36 @@
+#include<stdio.h>
+#include<string.h>
+
+int GetStr(char strarray[][100])
+{
+	int i = 0;
+	char str[100] = {}, badstr[] = "Fight Night Byte";
+	do
+	{
+		printf("Enter word");
+		if(scanf("%s", str)==-1)
+			break;
+		else
+			if(strstr(badstr,str) == NULL)
+				strcpy(strarray[i], str);
+		i++;
+	}
+	while(i < 3);
+	return(0);	
+}
+
+int main()
+{
+	int i = 0;
+	char strarray[100][100] = {};
+
+	GetStr(strarray);
+	for(i = 0; i < 3; i++)
+	{
+		
+		printf("%s\n", strarray[i]);	
+	}
+	
+	return(0);
+	
+}
