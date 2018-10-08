@@ -1,0 +1,27 @@
+#include<stdio.h>
+
+int GetInt(int promt[], int sizearray, int min, int max)
+{
+	int i = 0, val = 0;
+	
+	printf("Enter numbers\n");
+	for(i = 0; i < sizearray; i++)
+	{
+		if(scanf("%d", &val) == 1 && val >= min && val <= max)
+			promt[i] = val;
+		else
+			i = i-1;
+		
+	}
+return(0);
+}
+
+int main()
+{
+	int sizearray = 0, i = 0, promt[100] = {}, min = 0, max = 0;
+	scanf("%d %d %d", &sizearray, &min, &max);
+	GetInt(&promt[0], sizearray, min, max);
+	for(i = 0; i < sizearray; i++)
+		printf("%d", promt[i]);
+	return(0);
+}
