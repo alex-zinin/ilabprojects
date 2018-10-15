@@ -1,0 +1,38 @@
+#include<stdio.h>
+#include<string.h>
+#include<locale.h>
+
+
+
+int scanmeasure_from_input (FILE* fpin, double* napr , double* tok )
+{
+	double pnapr[100] = {0}, ptok[100] = {0};
+	int i = 0;
+		
+		for(i = 0; i < 30; i++)
+	{
+		fscanf(fpin, "%lf %lf",  &pnapr[i], &ptok[i]);
+		napr[i] = pnapr[i];
+		tok[i] = ptok[i];
+	}
+	return(0);
+}
+
+int main()
+{
+	
+	double napr[100] = {0}, tok[100] = {0};
+	FILE* fpin = fopen("inputmeasure.txt", "r");
+    FILE* fpout = fopen("outputmeasure.txt", "w");
+	
+	scanmeasure_from_input(fpin, napr, tok);
+	int i = 0;
+	for(i = 0; i < 30; i++)
+		fprintf(fpout, "%lf\n",  napr[i]/tok[i]);
+	fclose(fpout);	
+	fclose(fpin);
+	setlocale(LC_ALL, "Rus");
+	printf("Данная программа считывает значения напряжений и токов из входного файла с названием inputmeasure.\n");
+	printf("Вычисляя значения сопротивлений, программа помещает их в файл с названием outputmeasure.\n");
+	return(0);
+}
