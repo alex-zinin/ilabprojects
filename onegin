@@ -1,0 +1,206 @@
+#include<stdio.h>
+#include<string.h>
+#include<conio.h>
+#include<stdlib.h>
+#include<locale.h>	
+
+const int number_lines = 7900;
+const int size_str  = 100;
+int direcstrcmp( char * str1,  char * str2);
+int reserstrcmp( char * str1,  char * str2);
+int read_str(FILE* fpin, char str[][size_str]);
+int sort_str(int nstrok, char str[][size_str], int* strnum, int (*comp)(char*, char*));
+
+
+int main()
+{
+	setlocale(LC_ALL, "Rus");
+	int i = 0, j = 0;
+	char str[number_lines][size_str] = {}, str_c[number_lines][size_str] = {};
+	int statstr[number_lines] = {0}, statmin = 9999, strnum[number_lines] = {0}, istatmin = 0, nstrok = 0;
+	FILE* fpout = fopen("fileoutput.txt", "w");
+    FILE* fpin = fopen("haml.txt", "r");
+	
+	printf("Äàííàÿ ïðîãðàììà ïðåäíàçíà÷åíà äëÿ ñîðòèðîâêè ñòðîê â àëôàâèòíîì ïîðÿäêå\n");
+	nstrok = read_str( fpin,  str);
+
+	sort_str(nstrok, str, strnum, direcstrcmp);	
+	for(j = 0; j < nstrok; j++)
+	{
+		if(strlen(str[strnum[j]]) > 3)   // ïðîâåðêà íà ïóñòóþ ñòðîêó
+			fprintf(fpout, "%s\n",  str[strnum[j]] );
+	}
+	
+	fprintf(fpout,"--------------------------------------------------------------------\n\n\n\n\n\n\n");
+	
+	sort_str(nstrok, str, strnum, reserstrcmp);	
+	for(j = 0; j < nstrok; j++)
+	{
+		if(strlen(str[strnum[j]]) > 3)   // ïðîâåðêà íà ïóñòóþ ñòðîêó
+			fprintf(fpout, "%s\n",  str[strnum[j]] );
+	}
+	
+	
+	fclose(fpout);
+	fclose(fpin);
+}
+
+
+
+int read_str(FILE* fpin, char str[][size_str])
+{
+	
+	int i = 0, j = 0, nstrok = 0, sch = 0;
+	char ch;
+	for(i = 0;  !feof(fpin); i++) //ñ÷èòûâàåì ñòðîêè
+		{
+		for(j = 0; j < size_str; j++)
+		{
+			fscanf(fpin, "%c", &ch);
+		if(ch ==' ' &&  sch == 0  )
+			{
+			}
+			else
+			{
+				sch = 1;
+				str[i][j] = ch;
+			}
+		  	if(str[i][j] =='\n'|| str[i][j] == '\0' || str[i][j] == '\t')
+		  	{
+		  		if(str[i][j] == '\n' || str[i][j] == '\t')
+		  		{
+					str[i][j] = ' ';
+					sch = 0;
+				}
+		  		break;
+			}
+		}
+	 	
+	    nstrok = i;
+	   
+		}
+	return(nstrok);
+}
+
+int sort_str(int nstrok, char str[][size_str],int* strnum, int  (*comp)(char*, char*))
+{
+	
+	int i = 0, j = 0, statstr[number_lines] = {0}, statmin = 9999, istatmin = 0;
+	
+	for(i = 0; i < nstrok; i++) // sort str
+	{
+		for(j = 0; j < nstrok; j++)
+		{
+			if(i != j)
+				statstr[i] = statstr[i]+(*comp)(str[i],str[j]);	
+		}
+	}
+	for(j = 0; j < nstrok; j++)
+		{
+			for(i = 0; i < nstrok; i++)
+			{
+				if(statstr[i] < statmin)
+				{
+					statmin = statstr[i];
+					istatmin = i;
+				}
+			}
+			strnum[j] = istatmin;
+			statstr[istatmin] = 9999;
+			statmin = 8000;
+	    }	
+}
+
+
+
+int direcstrcmp( char  str1[],  char  str2[])
+{
+	int j = 0, k = 0, i = 0;
+	char st1, st2;
+	while(str1[i] != '\n' && str1[i] != '\0'&& str2[j] != '\n'&& str2[j] != '\0')
+	{
+		if(str1[i] == '\n' || str1[i] == '\0'|| str2[j] == '\n'||str2[j] == '\0')
+			break;
+		
+		
+		while(((64 < str1[i] && str1[i] < 91) || (96 < str1[i] && str1[i] < 123) )!= 1)
+		{
+			i++;
+			if(i == strlen(str1))
+				break;
+		}
+		while(((64 < str2[j] && str2[j] < 91) || (96 < str2[j] && str2[j] < 123)) !=1)
+		{
+			j++;
+			if(j == strlen(str2))
+				break;	
+		}
+		
+		if(str1[i] > str2[j])
+		{
+			return(1);
+		}
+		
+		if(str1[i] == str2[j])
+		{
+		
+		}
+		if(str1[i] < str2[j])
+		{
+			return(-1);
+		}
+		i++;
+		j++;
+	}
+	
+	return(0);
+}
+
+int reserstrcmp( char  str1[],  char  str2[])
+{
+	int s1 = 0, s2 = 0;
+	int j = 0, i = 0;
+	
+	s1 = strlen(str1);
+	s2 = strlen(str2);
+	
+	do
+	{
+		while(((64 < str1[s1-i] && str1[s1-i] < 91) || (96 < str1[s1-i] && str1[s1-i] < 123) )!= 1)
+		{
+			i++;
+			if(i == strlen(str1))
+				break;
+		}
+		
+		
+		
+		while(((64 < str2[s2-j] && str2[s2-j] < 91) || (96 < str2[s2-j] && str2[s2-j] < 123)) !=1)
+		{
+			j++;
+			if(j == strlen(str2))
+				break;	
+		}
+		
+		if(i == strlen(str1)||j == strlen(str2))
+			break;
+		if(str1[s1-i] > str2[s2-j])
+			{
+				return(1);
+			}
+			if(str1[s1-i] == str2[s2-j])
+			{
+				
+			}
+			if(str1[s1-i] < str2[s2-j])
+			{
+				return(-1);
+			}
+		
+		i++;
+		j++;
+	
+	}
+	while((i == strlen(str1))||(j == strlen(str2) )!=1);
+	return(0);
+}
